@@ -1,11 +1,12 @@
 package com.globant.counter.android.mvp.view;
 
-
 import android.app.Activity;
 import android.widget.TextView;
 
 import com.globant.counter.android.R;
-import com.squareup.otto.Bus;
+import com.globant.counter.android.util.bus.observers.CountButtonUpBusObserver;
+import com.globant.counter.android.util.bus.observers.ResetButtonObserver;
+import com.globant.counter.android.util.bus.RxBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -13,13 +14,11 @@ import butterknife.OnClick;
 
 public class CountView extends ActivityView {
 
-    private final Bus bus;
+    @BindView(R.id.count_label)
+    TextView countLabel;
 
-    @BindView(R.id.count_label) TextView countLabel;
-
-    public CountView(Activity activity, Bus bus) {
+    public CountView(Activity activity) {
         super(activity);
-        this.bus = bus;
         ButterKnife.bind(this, activity);
     }
 
@@ -29,19 +28,12 @@ public class CountView extends ActivityView {
 
     @OnClick(R.id.count_button)
     public void countButtonPressed() {
-        bus.post(new CountButtonPressedEvent());
+        RxBus.post(new CountButtonUpBusObserver.CountButtonUp());
     }
 
     @OnClick(R.id.reset_button)
     public void resetButtonPressed() {
-        bus.post(new ResetButtonPressedEvent());
+        RxBus.post(new ResetButtonObserver.ResetButtonPressed());
     }
 
-    public static class CountButtonPressedEvent {
-        // nothing to do.
-    }
-
-    public static class ResetButtonPressedEvent {
-        // nothing to do.
-    }
 }

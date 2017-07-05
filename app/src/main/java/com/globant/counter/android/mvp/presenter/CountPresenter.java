@@ -1,11 +1,13 @@
 package com.globant.counter.android.mvp.presenter;
 
+import android.app.Activity;
+
+import com.globant.counter.android.util.bus.observers.CountButtonUpBusObserver;
+import com.globant.counter.android.util.bus.observers.ResetButtonObserver;
+import com.globant.counter.android.util.bus.RxBus;
 import com.globant.counter.android.mvp.model.CountModel;
 import com.globant.counter.android.mvp.view.CountView;
-import com.squareup.otto.Subscribe;
 
-import static com.globant.counter.android.mvp.view.CountView.*;
-import static com.globant.counter.android.mvp.view.CountView.CountButtonPressedEvent;
 
 public class CountPresenter {
 
@@ -17,15 +19,46 @@ public class CountPresenter {
         this.view = view;
     }
 
-    @Subscribe
-    public void onCountButtonPressed(CountButtonPressedEvent event) {
+    public void onCountButtonPressed() {
         model.inc();
         view.setCount(String.valueOf(model.getCount()));
     }
 
-    @Subscribe
-    public void onResetButtonPressed(ResetButtonPressedEvent event) {
+    public void onResetButtonPressed() {
         model.reset();
         view.setCount(String.valueOf(model.getCount()));
+    }
+
+    public void register() {
+
+        Activity activity = view.getActivity();
+
+        if (activity==null){
+            return;
+        }
+
+        RxBus.subscribe(activity, new CountButtonUpBusObserver() {
+            @Override
+            public void onEvent(CountButtonUpBusObserver.CountButtonUp value) {
+                onCountButtonPressed();
+            }
+        });
+
+        RxBus.subscribe(activity, new ResetButtonObserver() {
+            @Override
+            public void onEvent(ResetButtonPressed value) {
+                onResetButtonPressed();
+            }
+        });
+
+    }
+
+    public void unregister() {
+        Activity activity = view.getActivity();
+
+        if (activity==null){
+            return;
+        }
+        RxBus.clear(activity);
     }
 }

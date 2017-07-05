@@ -39,7 +39,7 @@ public class PresenterTest {
     @Test
     public void isShouldIncCountByOne() {
         model.reset();
-        presenter.onCountButtonPressed(new CountView.CountButtonPressedEvent());
+        presenter.onCountButtonPressed();
         assertEquals(model.getCount(), 1);
         verify(view).setCount("1");
         verifyNoMoreInteractions(view);
@@ -47,11 +47,11 @@ public class PresenterTest {
 
     @Test
     public void isShouldResetCount() {
-        presenter.onCountButtonPressed(new CountView.CountButtonPressedEvent());
-        presenter.onCountButtonPressed(new CountView.CountButtonPressedEvent());
-        presenter.onCountButtonPressed(new CountView.CountButtonPressedEvent());
+        presenter.onCountButtonPressed();
+        presenter.onCountButtonPressed();
+        presenter.onCountButtonPressed();
         assertEquals(model.getCount(), 3);
-        presenter.onResetButtonPressed(new CountView.ResetButtonPressedEvent());
+        presenter.onResetButtonPressed();
         assertEquals(model.getCount(), 0);
         verify(view, times(4)).setCount(anyString());
         verifyNoMoreInteractions(view);
