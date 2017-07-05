@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Android</string>
+    <string name="intial_value">0</string>
+    <string name="inc">inc</string>
+    <string name="reset">reset</string>
+</resources>
