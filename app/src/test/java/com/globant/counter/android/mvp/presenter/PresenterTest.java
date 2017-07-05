@@ -5,10 +5,11 @@ import com.globant.counter.android.mvp.view.CountView;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -21,37 +22,35 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class PresenterTest {
 
     private CountPresenter presenter;
-    private CountModel model;
-    private CountView view;
+    @Mock CountModel model;
+    @Mock CountView view;
 
     @Before
     public void setup() {
-        model = new CountModel();
-        view = mock(CountView.class);
+        MockitoAnnotations.initMocks(this);
         presenter = new CountPresenter(model, view);
     }
 
     @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
-
-    @Test
-    public void isShouldIncCountByOne() {
-        model.reset();
+    public void shouldIncCountByOne() {
+        when(model.getCount()).thenReturn(1);
         presenter.onCountButtonPressed();
-        assertEquals(model.getCount(), 1);
+        verify(model).inc();
         verify(view).setCount("1");
         verifyNoMoreInteractions(view);
     }
 
     @Test
-    public void isShouldResetCount() {
+    public void shouldResetCount() {
+        when(model.getCount()).thenReturn(3);
         presenter.onCountButtonPressed();
         presenter.onCountButtonPressed();
         presenter.onCountButtonPressed();
+        verify(model,times(3)).inc();
         assertEquals(model.getCount(), 3);
+        when(model.getCount()).thenReturn(0);
         presenter.onResetButtonPressed();
+        verify(model).reset();
         assertEquals(model.getCount(), 0);
         verify(view, times(4)).setCount(anyString());
         verifyNoMoreInteractions(view);

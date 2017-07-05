@@ -14,8 +14,7 @@ import butterknife.OnClick;
 
 public class CountView extends ActivityView {
 
-    @BindView(R.id.count_label)
-    TextView countLabel;
+    @BindView(R.id.count_label) TextView countLabel;
 
     public CountView(Activity activity) {
         super(activity);

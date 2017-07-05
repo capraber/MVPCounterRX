@@ -8,7 +8,6 @@ import com.globant.counter.android.util.bus.RxBus;
 import com.globant.counter.android.mvp.model.CountModel;
 import com.globant.counter.android.mvp.view.CountView;
 
-
 public class CountPresenter {
 
     private CountModel model;
@@ -30,7 +29,6 @@ public class CountPresenter {
     }
 
     public void register() {
-
         Activity activity = view.getActivity();
 
         if (activity==null){
